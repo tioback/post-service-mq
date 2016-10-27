@@ -1,0 +1,1 @@
+worker: java -Dspring.profiles.active=heroku -jar target/post-service-mq*.jar

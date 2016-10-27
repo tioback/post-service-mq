@@ -6,9 +6,9 @@ import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.FanoutExchange;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -30,27 +30,29 @@ public class MQConfiguration {
 		return container;
 	}
 
-	@Autowired
-	AmqpAdmin admin;
+	@Bean
+	public AmqpAdmin amqpAdmin(ConnectionFactory connectionFactory) {
+		return new RabbitAdmin(connectionFactory);
+	}
 
 	@Bean
-	Queue queue() {
+	Queue queue(AmqpAdmin amqpAdmin) {
 		Queue queue = new Queue(PostServiceMqApplication.QUEUE_NAME, false);
-		admin.declareQueue(queue);
+		amqpAdmin.declareQueue(queue);
 		return queue;
 	}
 
 	@Bean
-	FanoutExchange exchange() {
+	FanoutExchange exchange(AmqpAdmin amqpAdmin) {
 		FanoutExchange exchange = new FanoutExchange(PostServiceMqApplication.EXCHANGE_NAME, false, false);
-		admin.declareExchange(exchange);
+		amqpAdmin.declareExchange(exchange);
 		return exchange;
 	}
 
 	@Bean
-	Binding binding(Queue queue, FanoutExchange exchange) {
+	Binding binding(AmqpAdmin amqpAdmin, Queue queue, FanoutExchange exchange) {
 		Binding binding = BindingBuilder.bind(queue).to(exchange);
-		admin.declareBinding(binding);
+		amqpAdmin.declareBinding(binding);
 		return binding;
 	}
 
