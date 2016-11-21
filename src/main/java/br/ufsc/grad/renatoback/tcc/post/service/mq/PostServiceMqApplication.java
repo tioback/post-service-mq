@@ -28,7 +28,7 @@ public class PostServiceMqApplication {
 		URI ampqUrl;
 		try {
 			// ampqUrl = new URI(getEnvOrThrow("CLOUDAMQP_URL"));
-			ampqUrl = new URI("amqp://flifteha:jRG6EbAeuvSbGLl2aHPk79tYc_fbpxab@buck.rmq.cloudamqp.com/flifteha");
+			ampqUrl = new URI("amqp://ftaollxx:33X65Vbm3dBU-sKLYczjFc7hUxlYSsk4@buck.rmq.cloudamqp.com/ftaollxx");
 		} catch (URISyntaxException e) {
 			throw new RuntimeException(e);
 		}
